@@ -5,6 +5,7 @@
 	export let value = [];
 	export let readonly = false;
 	export let placeholder = '';
+	export let inputEvent = () => console.log("a change happened")
 
 	let input,
 		inputValue,
@@ -32,6 +33,7 @@
 
 	function add(token) {
 		if (!readonly) selected[token.value] = token;
+		inputEvent()
 	}
 
 	function remove(value) {
@@ -39,6 +41,7 @@
 			const {[value]: val, ...rest} = selected;
 			selected = rest;
 		}
+		inputEvent()
 	}
 
 	function optionsVisibility(show) {

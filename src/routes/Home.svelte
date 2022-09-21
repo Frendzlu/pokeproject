@@ -77,7 +77,6 @@
 		let x = str.charAt(0).toUpperCase()
 		return x + str.substring(1)
 	}
-	console.log(pokemons)
 	if (pokemons.length == 0) {
 		processPokes()
 	}
@@ -88,6 +87,7 @@
 		for (let type of pokemon.types) {
 			if (!typeval.includes(type)) typeFlag = false
 		}
+		if (typeval.length === 0) typeFlag = true
 		return pokemon.name.toLowerCase().includes(searchStr.toLowerCase()) && typeFlag
 
 	})

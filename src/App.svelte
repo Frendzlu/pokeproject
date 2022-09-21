@@ -33,7 +33,7 @@
 						<input type="text" bind:value={searchStr} on:input={() => {homeComp.currentPage = 0}}>
 					</li>
 					<li>
-						<MultiSelect id='lang' bind:value={typeval}>
+						<MultiSelect id='lang' bind:value={typeval} inputEvent={() => {homeComp.currentPage = 0}}>
 							<option style="color: #78c850" value="grass">Grass</option>
 							<option style="color: #f08030" value="fire">Fire</option>
 							<option style="color: #6890f0" value="water">Water</option>
@@ -53,6 +53,7 @@
 							<option style="color: #5eb9b2" value="flying">Flying</option>
 							<option style="color: #2d1c1c" value="dark">Dark</option>
 							<option style="color: #260940" value="shadow">Shadow</option>
+							<option style="color: #aeaeae" value="unknown">Unknown</option>
 						</MultiSelect>
 					</li>
 				</ul>
