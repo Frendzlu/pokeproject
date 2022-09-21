@@ -82,7 +82,15 @@
 		processPokes()
 	}
 	export let searchStr =""
-	$: potentialPokes = pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(searchStr.toLowerCase()))
+	export let typeval = []
+	$: potentialPokes = pokemons.filter(pokemon => {
+		let typeFlag = true
+		for (let type of pokemon.types) {
+			if (!typeval.includes(type)) typeFlag = false
+		}
+		return pokemon.name.toLowerCase().includes(searchStr.toLowerCase()) && typeFlag
+
+	})
 	$: visible = potentialPokes.slice(currentPage * pokesPerPage, currentPage * pokesPerPage + pokesPerPage)
 	async function onVisibleChanged() {
 		for (const poke of visible) {

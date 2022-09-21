@@ -60,7 +60,7 @@
 		</div>
 	</nav>
 	<div>
-		<Route path="/"><Home bind:this={homeComp} searchStr={searchStr}/></Route>
+		<Route path="/"><Home bind:this={homeComp} searchStr={searchStr} typeval={typeval}/></Route>
 		<Route path="*" component={NotFound} />
 	</div>
 </Router>
