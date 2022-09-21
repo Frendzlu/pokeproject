@@ -1,29 +1,13 @@
-// Customized HMR-safe stores
-// Based off https://github.com/svitejs/svite/blob/ddec6b9/packages/playground/hmr/src/stores/hmr-stores.js
+// src/stores/content.js
 import { writable } from 'svelte/store'
 
-/**
- * @type { Record<string, import('svelte/store').Writable<any>> }
- */
-let stores = {}
+// Get the value out of storage on load.
+const stored = JSON.parse(localStorage.content || "[]")
+// or localStorage.getItem('content')
 
-/**
- * @template T
- * @param { string } id
- * @param { T } initialValue
- * @returns { import('svelte/store').Writable<T> }
- */
-export function getStore(id, initialValue) {
-  return stores[id] || (stores[id] = writable(initialValue))
-}
+// Set the stored value or a sane default.
+export const content = writable(stored)
 
-// preserve the store across HMR updates
-if (import.meta.hot) {
-  if (import.meta.hot.data.stores) {
-    stores = import.meta.hot.data.stores
-  }
-  import.meta.hot.accept()
-  import.meta.hot.dispose(() => {
-    import.meta.hot.data.stores = stores
-  })
-}
+// Anytime the store changes, update the local storage value.
+content.subscribe((value) => localStorage.content = JSON.stringify(value))
+// or localStorage.setItem('content', value)
