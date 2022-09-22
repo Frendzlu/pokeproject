@@ -24,6 +24,7 @@
 		});
 		value && (selected = options.reduce((obj, op) => value.includes(op.value) ? {...obj, [op.value]: op} : obj, {}));
 		first = false;
+        remove("grass")
 	});
 
 	$: if (!first) value = Object.values(selected).map(o => o.value);
