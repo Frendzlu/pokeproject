@@ -3,6 +3,7 @@
 	import PokemonTile from "../lib/PokemonTile.svelte";
 	import { content } from "../lib/hmr-stores"
 	import "../lib/Tailwind.css";
+    import { loop_guard } from "svelte/internal";
 	export let pages
 	async function getApiData() {
 		const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=2000`);
@@ -93,6 +94,7 @@
 	})
 	$: visible = potentialPokes.slice(currentPage * pokesPerPage, currentPage * pokesPerPage + pokesPerPage)
 	async function onVisibleChanged() {
+		console.log(pages)
 		for (const poke of visible) {
 			if (poke.types.includes("unknown")) {
 				poke.types = await getType(poke.apiId)
@@ -103,14 +105,14 @@
 		}
 	}
 
-	let pokesPerPage = 36
+	let pokesPerPage = 36;
 	export let currentPage = 0;
-	$: pages = potentialPokes.length / pokesPerPage;
+	$: pages = Math.ceil(potentialPokes.length / pokesPerPage);
 	let activePageString = "h-10 py-2 px-3 text-blue-600 bg-blue-50 border border-gray-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
 	let pageString = "h-10 py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
 </script>
 
-<div style="background-color: #eaeaea">
+<div style="background-color: #eaeaea; min-height: 100vh">
 	<div class="flex flex-wrap justify-center">
 		{#each visible as pokemon}
 			<PokemonTile
@@ -125,11 +127,11 @@
 		<li>
 			<button on:click={() => {currentPage = (currentPage !== 0 ? currentPage - 1 : currentPage); onVisibleChanged()}} class="h-10 py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</button>
 		</li>
-		{#each Array(Math.ceil(pages)) as _, i}
+		{#each Array(pages) as _, i}
 			<button on:click={() => {currentPage = i; onVisibleChanged()}} class={currentPage === i ? activePageString : pageString}>{i+1}</button>
 		{/each}
 		<li>
-			<button on:click={() => {currentPage = (currentPage !== pages ? currentPage + 1 : currentPage); onVisibleChanged()}} class="h-10 py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</button>
+			<button on:click={() => {console.log(currentPage, pages); currentPage = (currentPage !== pages - 1 ? currentPage + 1 : currentPage); onVisibleChanged()}} class="h-10 py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</button>
 		</li>
 	</ul>
 </div>
